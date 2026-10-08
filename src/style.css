@@ -635,6 +635,13 @@ button {
   }
 }
 
+/* Sembunyikan foto hero di mobile & tablet */
+@media (max-width: 1023px) {
+  .hero-visual {
+    display: none;
+  }
+}
+
 .hero-chip {
   position: absolute;
   left: -1rem;
