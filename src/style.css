@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* ============================= DESIGN TOKENS ============================= */
 @theme {
   --color-base: #0a0a0a;
   --color-surface: #111111;
@@ -20,7 +19,6 @@
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
 }
 
-/* ============================= BASE ============================= */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
@@ -107,7 +105,6 @@ button {
   top: 1rem;
 }
 
-/* ============================= LAYOUT ============================= */
 .container-x {
   width: min(1200px, calc(100% - 2.5rem));
   margin-inline: auto;
@@ -199,7 +196,6 @@ button {
   stroke-linejoin: round;
 }
 
-/* ============================= BUTTONS ============================= */
 .btn {
   display: inline-flex;
   align-items: center;
@@ -259,7 +255,6 @@ button {
   gap: 0.65rem;
 }
 
-/* ============================= CARDS / TAGS ============================= */
 .card {
   background: var(--color-card);
   border: 1px solid var(--color-line);
@@ -293,7 +288,6 @@ button {
   font-size: 0.7rem;
 }
 
-/* ============================= NAVBAR ============================= */
 .site-header {
   position: fixed;
   inset-inline: 0;
@@ -460,7 +454,6 @@ button {
   box-shadow: inset 2px 0 0 var(--color-accent);
 }
 
-/* ============================= HERO ============================= */
 .hero {
   position: relative;
   display: flex;
@@ -557,7 +550,7 @@ button {
 
 @media (min-width: 1024px) {
   .hero-inner {
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: 1fr 1fr;
     gap: 4rem;
   }
 }
@@ -632,13 +625,13 @@ button {
 .hero-visual {
   position: relative;
   justify-self: center;
-  width: min(360px, 88%);
+  width: min(430px, 92%);
 }
 
 @media (min-width: 1024px) {
   .hero-visual {
     justify-self: end;
-    width: min(400px, 100%);
+    width: min(560px, 100%);
   }
 }
 
@@ -705,26 +698,10 @@ button {
   .scroll-hint { display: none; }
 }
 
-/* ============================= PROFILE FRAME ============================= */
 .profile-frame {
   position: relative;
-  aspect-ratio: 4 / 5;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
-  border: 1px solid var(--color-line-2);
-  border-radius: 1.6rem;
-  background: linear-gradient(160deg, #171717 0%, #101010 55%, #0d1220 100%);
-  box-shadow: 0 30px 70px -30px rgba(0, 0, 0, 0.9),
-    0 0 60px -22px rgba(0, 94, 233, 0.35);
-}
-
-.profile-frame::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-image: linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
-  background-size: 34px 34px;
-  pointer-events: none;
 }
 
 .profile-frame img {
@@ -757,11 +734,6 @@ button {
   stroke-width: 1.2;
 }
 
-.profile-frame--lg {
-  border-radius: 1.8rem;
-}
-
-/* ============================= ABOUT ============================= */
 .about-grid {
   display: grid;
   gap: 3rem;
@@ -777,7 +749,7 @@ button {
 
 .about-photo {
   position: relative;
-  max-width: 380px;
+  max-width: 500px;
 }
 
 .status-badge {
@@ -877,7 +849,6 @@ button {
   line-height: 1.4;
 }
 
-/* ============================= TIMELINE ============================= */
 .timeline {
   position: relative;
   display: grid;
@@ -949,7 +920,6 @@ button {
   margin-top: 0.9rem;
 }
 
-/* ============================= EXPERIENCE ============================= */
 .exp-head {
   display: flex;
   align-items: flex-start;
@@ -1001,7 +971,6 @@ button {
   border-top: 1px solid var(--color-line);
 }
 
-/* ============================= CERTIFICATES ============================= */
 .cert-grid {
   display: grid;
   gap: 1.5rem;
@@ -1050,7 +1019,20 @@ button {
   color: rgba(255, 255, 255, 0.85);
 }
 
+.cert-thumb-img {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .cert-cat {
+  position: absolute;
+  left: 1.1rem;
+  bottom: 1.1rem;
+  z-index: 1;
   padding: 0.28rem 0.6rem;
   border: 1px solid var(--color-line-2);
   border-radius: 999px;
@@ -1112,7 +1094,6 @@ button {
   color: var(--color-accent-2);
 }
 
-/* ============================= MODAL ============================= */
 .modal {
   position: fixed;
   inset: 0;
@@ -1186,7 +1167,6 @@ button {
   margin-bottom: 1.5rem;
 }
 
-/* ============================= PROJECTS ============================= */
 .project-grid {
   display: grid;
   gap: 1.5rem;
@@ -1201,7 +1181,7 @@ button {
 
 @media (min-width: 1024px) {
   .project-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -1257,6 +1237,22 @@ button {
   color: rgba(255, 255, 255, 0.24);
 }
 
+.project-media-img {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  transition: transform 0.5s ease;
+}
+
+.project-card:hover .project-media-img {
+  transform: scale(1.05);
+}
+
 .project-body {
   display: flex;
   flex: 1;
@@ -1280,7 +1276,6 @@ button {
   padding-top: 0.4rem;
 }
 
-/* ============================= SKILLS ============================= */
 .skills-grid {
   display: grid;
   gap: 1.4rem;
@@ -1369,7 +1364,6 @@ button {
   background: #4a4a4a;
 }
 
-/* Skill utama: indikator subtle tanpa persentase */
 .skill--core {
   color: var(--color-ink);
   border-color: rgba(0, 94, 233, 0.4);
@@ -1381,7 +1375,6 @@ button {
   box-shadow: 0 0 8px rgba(47, 128, 255, 0.9);
 }
 
-/* ============================= MARQUEE ============================= */
 .marquee-section {
   padding-block: clamp(2.5rem, 5vw, 3.5rem);
   border-top: 1px solid var(--color-line);
@@ -1438,7 +1431,6 @@ button {
   to { transform: translateX(-50%); }
 }
 
-/* ============================= CONTACT ============================= */
 .contact-card {
   position: relative;
   display: grid;
@@ -1477,21 +1469,14 @@ button {
   margin-block: 2.2rem;
 }
 
-.contact-list a {
+.contact-item {
   display: flex;
   align-items: center;
   gap: 0.95rem;
   padding: 0.75rem 0.9rem;
   border: 1px solid transparent;
   border-radius: 1rem;
-  transition: border-color 0.25s ease, background-color 0.25s ease,
-    transform 0.25s ease;
-}
-
-.contact-list a:hover {
-  border-color: rgba(0, 94, 233, 0.4);
-  background: rgba(0, 94, 233, 0.07);
-  transform: translateX(4px);
+  cursor: default;
 }
 
 .contact-icon {
@@ -1587,6 +1572,23 @@ button {
   justify-self: start;
 }
 
+.contact-form .btn:disabled,
+.contact-form .btn:disabled:hover {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.honeypot {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  pointer-events: none;
+}
+
 .form-status {
   min-height: 1.2em;
   font-size: 0.85rem;
@@ -1601,7 +1603,6 @@ button {
   color: #34d399;
 }
 
-/* ============================= FOOTER ============================= */
 .footer {
   border-top: 1px solid var(--color-line);
   background: var(--color-surface);
@@ -1667,7 +1668,6 @@ button {
   font-size: 0.82rem;
 }
 
-/* ============================= ANIMATIONS ============================= */
 [data-reveal] {
   opacity: 0;
   transform: translateY(22px);

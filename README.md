@@ -15,7 +15,7 @@ Modern dark personal portfolio website for a **Fresh Graduate SMK Rekayasa Peran
 
 - Sticky navbar with blur-on-scroll and active section indicator
 - Hero with staggered entrance animation, grid pattern, and subtle glows
-- About, Education (timeline), Certificates (cards + lightbox modal), Experience (timeline with responsibilities & tech tags), Featured Projects (4-column responsive grid)
+- About, Education (timeline), Certificates (cards + lightbox modal), Experience (timeline with responsibilities & tech tags), Featured Projects (3-column responsive grid, single "View Project" action)
 - Skills grouped by category (no percentage bars) + horizontal tech marquee
 - Contact section with validation-friendly form
 - Fully responsive (desktop / tablet / mobile), semantic HTML, keyboard-friendly, `prefers-reduced-motion` support

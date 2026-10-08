@@ -1,0 +1,21 @@
+# Normalisasi line ending: semua text disimpan sebagai LF di repo,
+# supaya tidak ada warning "LF will be replaced by CRLF" dan timpa-menimpa
+# line ending antar sesi/kolaborator. Binary (gambar, pdf, zip) dikecualikan
+# otomatis oleh Git karena deteksi binary.
+* text=auto
+
+*.html text
+*.css text
+*.js text
+*.json text
+*.md text
+*.txt text
+*.svg text
+
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.webp binary
+*.gif binary
+*.ico binary
+*.pdf binary

@@ -1,22 +1,15 @@
-/* ===================================================================
-   Portfolio — interactions
-   Navbar, mobile menu, active section, reveal animation, project
-   filter, certificate modal, contact form.
-=================================================================== */
-
 const header = document.querySelector("#siteHeader");
 const menuBtn = document.querySelector("#menuBtn");
 const mobileMenu = document.querySelector("#mobileMenu");
 const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+const pageLoadedAt = Date.now();
 
-/* ------------------------- Navbar: blur saat scroll ------------------------- */
 const updateHeader = () => {
   header.classList.toggle("is-scrolled", window.scrollY > 8);
 };
 updateHeader();
 window.addEventListener("scroll", updateHeader, { passive: true });
 
-/* ------------------------- Mobile menu ------------------------- */
 const setMenu = (open) => {
   menuBtn.classList.toggle("is-open", open);
   mobileMenu.classList.toggle("is-open", open);
@@ -43,7 +36,6 @@ window.addEventListener("resize", () => {
   if (window.innerWidth >= 1024) setMenu(false);
 });
 
-/* ------------------------- Active section indicator ------------------------- */
 const navLinks = document.querySelectorAll(".nav-link, .mobile-link");
 
 const setActiveSection = (id) => {
@@ -65,7 +57,6 @@ document
   .querySelectorAll("main section[id]")
   .forEach((section) => sectionObserver.observe(section));
 
-/* ------------------------- Reveal on scroll (stagger) ------------------------- */
 document.querySelectorAll("[data-reveal-group]").forEach((group) => {
   group.querySelectorAll(":scope > [data-reveal]").forEach((el, index) => {
     el.style.setProperty("--reveal-delay", `${Math.min(index * 70, 420)}ms`);
@@ -88,7 +79,6 @@ document.querySelectorAll("[data-reveal]").forEach((el) => {
   revealObserver.observe(el);
 });
 
-/* ------------------------- Certificate modal ------------------------- */
 const modal = document.querySelector("#certModal");
 const modalClose = document.querySelector("#certModalClose");
 const modalThumb = document.querySelector("#certModalThumb");
@@ -96,17 +86,27 @@ const modalCat = document.querySelector("#certModalCat");
 const modalMeta = document.querySelector("#certModalMeta");
 const modalTitle = document.querySelector("#certModalTitle");
 const modalDesc = document.querySelector("#certModalDesc");
-const modalLink = document.querySelector("#certModalLink");
+const modalImg = document.querySelector("#certModalImg");
+const modalIcon = modalThumb.querySelector(".icon");
 let lastFocusedElement = null;
 
 const openModal = (card) => {
   lastFocusedElement = document.activeElement;
+  const image = card.dataset.image;
   modalThumb.querySelector(".cert-cat").textContent = card.dataset.category;
   modalCat.textContent = card.dataset.category;
   modalMeta.textContent = `${card.dataset.org} · ${card.dataset.year}`;
   modalTitle.textContent = card.dataset.title;
   modalDesc.textContent = card.dataset.desc;
-  modalLink.href = card.dataset.credential;
+  if (image) {
+    modalImg.src = image;
+    modalImg.hidden = false;
+    modalIcon.hidden = true;
+  } else {
+    modalImg.removeAttribute("src");
+    modalImg.hidden = true;
+    modalIcon.hidden = false;
+  }
   modal.classList.add("is-open");
   modal.setAttribute("aria-hidden", "false");
   document.body.style.overflow = "hidden";
@@ -136,7 +136,6 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
-/* ------------------------- Contact form ------------------------- */
 const form = document.querySelector("#contactForm");
 const formStatus = document.querySelector("#formStatus");
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -149,7 +148,18 @@ const setStatus = (message, type = "") => {
 form.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const fields = [...form.querySelectorAll("input, textarea")];
+  const honeypot = form.querySelector('input[name="botcheck"]');
+  const tooFast = Date.now() - pageLoadedAt < 3000;
+
+  if ((honeypot && honeypot.checked) || tooFast) {
+    form.reset();
+    setStatus("Thanks for reaching out! I'll get back to you soon.", "success");
+    return;
+  }
+
+  const fields = [...form.querySelectorAll("input, textarea")].filter(
+    (field) => field.type !== "hidden" && !field.classList.contains("honeypot")
+  );
   let firstInvalid = null;
 
   fields.forEach((field) => {
@@ -170,23 +180,32 @@ form.addEventListener("submit", async (event) => {
   const data = Object.fromEntries(new FormData(form));
 
   if (endpoint) {
-    // Form backend aktif (contoh: Formspree) → kirim langsung
+    const submitButton = form.querySelector('button[type="submit"]');
     setStatus("Sending…");
+    submitButton.disabled = true;
     try {
       const response = await fetch(endpoint, {
         method: "POST",
         headers: { Accept: "application/json", "Content-Type": "application/json" },
         body: JSON.stringify(data),
-      });
-      if (!response.ok) throw new Error("Request failed");
-      form.reset();
-      setStatus("Thanks for reaching out! I'll get back to you soon.", "success");
-    } catch {
-      setStatus("Something went wrong — please email me directly.", "error");
+      }).catch(() => null);
+
+      const result = response ? await response.json().catch(() => null) : null;
+
+      if (response && response.ok && result?.success !== false) {
+        form.reset();
+        setStatus("Thanks for reaching out! I'll get back to you soon.", "success");
+      } else {
+        setStatus(
+          result?.message || "Something went wrong — please email me directly.",
+          "error"
+        );
+      }
+    } finally {
+      submitButton.disabled = false;
     }
   } else {
-    // Belum ada backend → buka email client dengan isi pesan
-    const subject = encodeURIComponent(`[Portfolio] ${data.subject}`);
+    const subject = encodeURIComponent(data.subject || "[Portfolio] Pesan Baru");
     const body = encodeURIComponent(
       `${data.message}\n\n— ${data.name} (${data.email})`
     );
@@ -196,14 +215,12 @@ form.addEventListener("submit", async (event) => {
   }
 });
 
-// Bersihkan status error saat user mengetik ulang
 form.addEventListener("input", (event) => {
   const field = event.target;
   if (field.matches("input, textarea")) field.removeAttribute("aria-invalid");
   if (formStatus.classList.contains("is-error")) setStatus("");
 });
 
-/* ------------------------- Smooth scroll (reduced motion aware) ------------------------- */
 document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
   anchor.addEventListener("click", (event) => {
     const id = anchor.getAttribute("href");
